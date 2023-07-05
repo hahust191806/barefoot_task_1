@@ -1,0 +1,3 @@
+ID|Name|Birthday|Phone_Number
+1|Ha|01102001|123
+1|Dong|19062001|124

@@ -1,0 +1,2 @@
+ID|Name|Birthday|Phone_Number|Head_of_Class
+1|Ha|01-10-2001|123|Math

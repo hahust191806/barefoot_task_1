@@ -10,9 +10,10 @@ class Class:
         
 # Create Students object
 class Student: 
-    def __init__(self, id, name, birthday, phonenb):
+    def __init__(self, id, name, class_id, birthday, phonenb):
         self.id = id 
         self.name = name 
+        self.class_id = class_id
         self.birthday = birthday
         self.phonenb = phonenb
         
@@ -92,19 +93,19 @@ def delete_class(args):
 
 # <--Students-->
 def add_student(args):
-    new_student = Student(args.id, args.name, args.birthday, args.phonenb)
+    new_student = Student(args.id, args.name, args.class_id, args.birthday, args.phonenb)
     
     # Kiểm tra xem file classes.txt có tồn tại hay không
     if not os.path.exists('students.txt'):
         # Nếu chưa tồn tại, tạo file mới với dòng đầu tiên là tên cột
         with open('students.txt', 'w', newline='') as f:
             writer = csv.writer(f, delimiter='|')
-            writer.writerow(['ID', 'Name', 'Birthday', 'Phone_Number'])
+            writer.writerow(['ID', 'Name', 'Class_ID', 'Birthday', 'Phone_Number'])
 
     # Ghi đối tượng Class vào file classes.txt
     with open('students.txt', 'a', newline='') as f:
         writer = csv.writer(f, delimiter='|')
-        writer.writerow([new_student.id, new_student.name, new_student.birthday, new_student.phonenb])
+        writer.writerow([new_student.id, new_student.name, new_student.class_id, new_student.birthday, new_student.phonenb])
         
 def edit_student(args):
     # Đọc dữ liệu từ file classes.txt vào một danh sách
@@ -117,8 +118,9 @@ def edit_student(args):
     for row in rows[1:]:
         if int(row[0]) == args.id:
             row[1] = args.name
-            row[2] = args.birthday
-            row[3] = args.phonenb
+            row[2] = args.class_id
+            row[3] = args.birthday
+            row[4] = args.phonenb
             found = True
             break
 
