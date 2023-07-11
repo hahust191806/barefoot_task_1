@@ -61,77 +61,70 @@ class auto_signup:
         
         # khởi tạo đối tượng webdriver với Chrome 
         driver = webdriver.Chrome()
-
+        wait = WebDriverWait(driver, 10)
+        
         # Chuyển hướng tới url được cung cấp, và driver sẽ đợi đến khi web được tải xong
         driver.get("https://badoo.com/signup")
         time.sleep(2)
 
         # <--Page 1-->: send tài khoản và mật khẩu, sau đó click submit 
         # tìm id element
-        id_element = driver.find_element(By.ID, "login")
+        id_element = wait.until(EC.visibility_of_element_located((By.ID, 'login')))
         # tìm password element
-        password_element = driver.find_element(By.CLASS_NAME, "js-password")   
+        password_element = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "js-password"))) 
          
         # entering user name 
         id_element.send_keys(self.email)
-        time.sleep(1)
         
         # entering password 
         password_element.send_keys("Hayeulinh1@")
-        time.sleep(1)
         
         # find submit button
-        submit_element = driver.find_element(By.CLASS_NAME, "btn--block")
+        submit_element = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "btn--block"))) 
         submit_element.click() # submit 
-        time.sleep(10)
+        time.sleep(5)
 
         self.current_url = driver.current_url 
+        print(self.current_url)
+        if self.current_url == 'https://badoo.com/signup':
+            while self.current_url == 'https://badoo.com/signup':
+                # <--Step 2--> resolve captcha
+                captcha_element = wait.until(EC.visibility_of_element_located((By.ID, "check_code_img"))) 
 
-        while self.current_url != 'https://badoo.com/update':
-            # <--Step 2--> resolve captcha
-            captcha_element = driver.find_element(By.ID, "check_code_img")
+                # chụp ảnh captcha và lưu dưới file captcha.gif
+                screenshot = captcha_element.screenshot_as_png
+                with open('captcha.gif', 'wb') as f:
+                    f.write(screenshot)
+                
+                # giải captcha
+                captcha = solve_captcha('captcha.gif')
 
-            # chụp ảnh captcha và lưu dưới file captcha.gif
-            screenshot = captcha_element.screenshot_as_png
-            with open('captcha.gif', 'wb') as f:
-                f.write(screenshot)
-            
-            # giải captcha
-            captcha = solve_captcha('captcha.gif')
+                # tìm checkcode element 
+                id_element = wait.until(EC.visibility_of_element_located((By.ID, "checkcode")))
+                id_element.send_keys(captcha)
+                
+                # find submit button
+                submit_element = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "btn--block")))
+                submit_element.click() # submit 
+                time.sleep(5)
+                
+                # lấy url hiện tại
+                self.current_url = driver.current_url
 
-            # tìm checkcode element 
-            id_element = driver.find_element(By.ID, "checkcode")
-            id_element.send_keys(captcha)
-            time.sleep(5)
-            
-            # find submit button
-            submit_element = driver.find_element(By.CLASS_NAME, "btn--block")
-            submit_element.click() # submit 
-            time.sleep(5)
-            
-            # lấy url hiện tại
-            self.current_url = driver.current_url
-
-
-        time.sleep(5)
         # <--Step 3-->: điền tên (không có số), ngày sinh, tháng sinh, năm sinh v.v.
         # tìm user name element
-        fullname_element = driver.find_element(By.NAME, "fullname")
+        fullname_element = wait.until(EC.visibility_of_element_located((By.NAME, "fullname")))
         fullname_element.send_keys(self.user_name) # entering user_name 
-        time.sleep(2)
         
         # tìm day field element
-        day_element = driver.find_element(By.CSS_SELECTOR, '.js-signup-day')
+        day_element = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.js-signup-day')))
         day_element.click() # Click vào phần tử select để mở trường select
-        time.sleep(2)
-        day_input = driver.find_element(By.CSS_SELECTOR, 'li[data-qa-value="1"]') # Tìm phần tử li chứa giá trị "01" và chọn nó
+        day_input = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, 'li[data-qa-value="1"]')))
         day_input.click()
-        time.sleep(2)
         
         # tìm month field element
-        month_element = driver.find_element(By.CSS_SELECTOR, '.js-signup-month') # tìm month field element
+        month_element = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.js-signup-month')))
         month_element.click() # Click vào phần tử select để mở trường select
-        time.sleep(2)
         # Tìm phần tử li chứa giá trị "01" và chọn nó
         div_element1 = driver.find_element(By.CSS_SELECTOR, '.js-signup-month')
         div_element2 = div_element1.find_element(By.CLASS_NAME, 'dropdown--select')
@@ -141,48 +134,43 @@ class auto_signup:
         ul_element = div_element5.find_element(By.CLASS_NAME, 'options')
         month_input = ul_element.find_element(By.CSS_SELECTOR, 'li[data-qa-value="5"]')
         month_input.click()
-        time.sleep(2)
         
         # tìm year field element
         year_element = driver.find_element(By.CSS_SELECTOR, '.js-signup-year') # Click vào phần tử select để mở trường select
         year_element.click()
         year_input = driver.find_element(By.CSS_SELECTOR, 'li[data-qa-value="1997"]') # Tìm phần tử li chứa giá trị "1997" và chọn nó
         year_input.click()
-        time.sleep(2)
         
         # tìm location element
-        local_element = driver.find_element(By.CLASS_NAME, 'js-location-list')
+        local_element = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, 'js-location-list')))
         local_element.click()
-        time.sleep(1)
-        local_input = driver.find_element(By.CSS_SELECTOR, 'li[data-value="15_2950_243"]') # Tìm phần tử li chứa giá trị "15_2950_243" và chọn nó
+        local_input = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, 'li[data-value="15_2950_243"]')))
         local_input.click()
-        time.sleep(2)
         
         # tìm gender element
-        gender_element = driver.find_element(By.ID, 'male')
+        gender_element = wait.until(EC.visibility_of_element_located((By.ID, 'male')))
         gender_element.click() # entering gender 
-        time.sleep(2)
         
         # continue button 
-        continue_button  = driver.find_element(By.NAME, 'create_profile')
+        continue_button = wait.until(EC.visibility_of_element_located((By.NAME, 'create_profile')))
         continue_button.click()
-        time.sleep(5)
 
         # tìm đối tượng submit và nhấn nút để tải lên
-        submit_button = driver.find_element(By.CLASS_NAME, "file-upload__hint")
+        submit_button = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "file-upload__hint")))
         submit_button.click()
-        time.sleep(2)
         
         # điền đường dẫn tới tệp tin
-        pyautogui.typewrite(r"C:\Users\Kieu Trung Ha\Desktop\internship\task_5\deptraikhoaito.jpg")
+        path_to_img = r"C:\Users\Kieu Trung Ha\Desktop\internship\task_5\deptraikhoaito.jpg"
+        pyautogui.typewrite(path_to_img, interval=0.1)
         # ấn phím Enter
         pyautogui.press('enter')
-        time.sleep(8)
+        time.sleep(5)
         
         # create profile 
         create_profile = driver.find_element(By.CSS_SELECTOR, ".react-button.react-button--filled.react-button--md.react-button--color-primary.react-button--narrow")
+        # create_profile = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".react-button.react-button--filled.react-button--md.react-button--color-primary.react-button--narrow")))
         create_profile.click()
-        time.sleep(5)
+        # time.sleep(5)
         
 acc1 = auto_signup()
 acc1.run_auto_signup()
