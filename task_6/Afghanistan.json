@@ -1,0 +1,21 @@
+{
+    "BTC": {
+        "Eneba": [
+            {
+                "wallet_address": {
+                    "Avalanche": [
+                        "0xb3d8621b3c86EF75bF798bBdd84AA161C39f6E61"
+                    ]
+                },
+                "area_redeem": "Only redeemable in Afghanistan",
+                "delevery": "Instant delivery",
+                "title": "Eneba Gift Card",
+                "country": "Afghanistan",
+                "img": "https://img.cryptorefills.com/logos_v2/eneba.jpg",
+                "type": "Ecommerce",
+                "content": "Buy now a Eneba gift card with Bitcoin and other Crypto. Receive your gift card instantly by email. Important, this product may not work in countries outside of Afghanistan, redeeming with a VPN will likely not work. Pay with Bitcoin, Litecoin, Ethereum, USDC, USDT, MIM, EUROC, FRAX, EUROC, BUSD, and DAI on Lightning Network, Avalanche, Polygon, Fantom, Binance Chain, and Arbitrum.",
+                "decription": "Looking for more funding options for your ENEBA account? By buying this ENEBA Gift Card online at CryptoRefills you can choose from a wide variety of payment methods. You\u2019ll receive your code instantly by email. Redeem it directly to fund your account balance and enjoy buying the newest games and game related items for the greatest price!"
+            }
+        ]
+    }
+}
