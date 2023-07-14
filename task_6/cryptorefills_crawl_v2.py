@@ -93,6 +93,20 @@ if check_description_element:
 else: 
     decription = ""
     
+# lấy thông tin items
+wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '.cart-products__field--product')))
+wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '.cart-products__field--amount div:first-child')))
+value = driver.find_elements(By.CSS_SELECTOR, '.cart-products__field--product')
+prices = driver.find_elements(By.CSS_SELECTOR, '.cart-products__field--amount div:first-child')
+point = driver.find_element(By.CSS_SELECTOR,'.cart-products__field--points span:last-child')
+item_data =[]
+# Lặp qua các phần tử trong cart để lấy thông tin
+for j in range (0,len(prices)):
+    item_data.append({
+                            "value" : value[j].text,
+                            "point_plus" : point.text,
+                            "price" : prices[j].text.split()[0]
+                            })
     
 # <--Add to cart-->  
 add_to_cart_element = wait.until(EC.visibility_of_element_located((By.XPATH, "/html/body/crypt-root/div/div/div/crypt-products-page/div/div/div/div[2]/div[2]/div[2]/crypt-product-dynamic-preview/div/div[3]/button")))
@@ -179,7 +193,8 @@ for id_pricing in range(1, len(list_pricing) + 1):
                     "img": img, 
                     "type": type, 
                     "content": content, 
-                    "decription": decription             
+                    "decription": decription, 
+                    "items": None           
                 }
                 
             ]
@@ -193,6 +208,7 @@ for id_pricing in range(1, len(list_pricing) + 1):
         
     pricing[game][0]["wallet_address"] = wallet_data
     data[pricing_name] = pricing  
+    pricing[game][0]["items"] = item_data
     file_name = countries_name + ".json"
     with open(file_name, "w") as old_file:
         json.dump(data, old_file, indent=4)
