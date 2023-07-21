@@ -34,18 +34,18 @@ driver = webdriver.Chrome(options=options)
 # driver = webdriver.Chrome()
 wait = WebDriverWait(driver, 10)
 
-# chuyển hướng tới trang web tải lyrics bài hát 
-driver.get("https://syrics-web-akashrchandran.vercel.app/")
-
 list_song_url = []
 
-with open("list_song.txt", "r") as f: 
+with open("list_2000_tracks_name.txt", "r", encoding="utf-8") as f: 
         for line in f:
             # Tách dòng thành các phần riêng biệt bằng khoảng trắng
             parts = line.split()
 
             # Lấy liên kết Spotify cuối cùng của dòng và thêm nó vào danh sách
             list_song_url.append(parts[-1])
+            
+# chuyển hướng tới trang web tải lyrics bài hát 
+driver.get("https://syrics-web-akashrchandran.vercel.app/")
 
 for song_url in list_song_url: 
     # tải track songs
@@ -66,5 +66,4 @@ for song_url in list_song_url:
 
     pyautogui.press('enter')
     time.sleep(2)
-    break
-    # driver.back()
+    driver.back()
